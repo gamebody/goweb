@@ -1,0 +1,25 @@
+{{ template "header" . }}
+<div>
+    <div>
+      <a href="/posts?author={{ .user.ID }}" title="{{ .user.Name }}" data-bio="{{ .user.Bio }}" class="avatar">
+        <img src="/public/imgs/{{ .user.Avatar }}" >
+        <span>{{ .user.Name }}</span>
+      </a>
+
+    </div>
+  
+    <div>
+      <form method="post">
+        <div>
+          <label>标题</label>
+          <input type="text" name="title">
+        </div>
+        <div>
+          <label>内容</label>
+          <textarea name="content" rows="15"></textarea>
+        </div>
+        <input type="submit" value="发布">
+      </form>
+    </div>
+  </div>
+{{ template "footer" . }}

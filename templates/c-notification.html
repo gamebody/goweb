@@ -1,0 +1,7 @@
+{{ define "notification" }}
+
+{{ range $i, $e := .flash }}
+  <div>{{ $e }}</div>
+{{ end }}
+
+{{ end }}

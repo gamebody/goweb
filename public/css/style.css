@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.black-line {
+  border: 1px solid #999;
+}
+
+
+.error {
+  color: red;
+}
+
+.success {
+  color: chartreuse;
+}
+
+
+.avatar {
+  
+}
+
+.avatar img {
+  width: 30px;
+  height: 30px;
+  border:1px solid #333;
+  border-radius: 50%;
+}
