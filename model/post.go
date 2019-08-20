@@ -2,7 +2,8 @@ package model
 
 import (
 	"errors"
-	"initdb"
+
+	"github.com/gamebody/goweb/initdb"
 )
 
 // Post 用户相关字段

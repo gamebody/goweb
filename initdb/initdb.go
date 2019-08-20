@@ -14,6 +14,7 @@ func init() {
 	if err != nil {
 		fmt.Println("连接失败了")
 		fmt.Println(err)
+		panic(err)
 	}
 	fmt.Println("数据库连接成功")
 	Db.SetMaxOpenConns(10)

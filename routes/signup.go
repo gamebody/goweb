@@ -2,10 +2,11 @@ package routes
 
 import (
 	"fmt"
-	"model"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/gamebody/goweb/model"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"

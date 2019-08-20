@@ -1,7 +1,7 @@
 package main
 
 import (
-	"routes"
+	"github.com/gamebody/goweb/routes"
 
 	_ "github.com/go-sql-driver/mysql"
 )

@@ -3,9 +3,10 @@ package routes
 import (
 	"encoding/json"
 	"fmt"
-	"middleware"
-	"model"
 	"net/http"
+
+	"github.com/gamebody/goweb/middleware"
+	"github.com/gamebody/goweb/model"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"

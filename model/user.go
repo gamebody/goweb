@@ -3,8 +3,10 @@ package model
 import (
 	"errors"
 	"fmt"
-	"initdb"
-	"lib"
+
+	"github.com/gamebody/goweb/lib"
+
+	"github.com/gamebody/goweb/initdb"
 )
 
 // User 用户相关字段
