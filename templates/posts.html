@@ -1,35 +1,5 @@
 {{ template "header" . }}
-<div>
-    <div>
-      <a href="/posts?author={{ .user.ID }}" title="{{ .user.Name }}" data-bio="{{ .user.Bio }}" class="avatar">
-        <img src="/public/imgs/{{ .user.Avatar }}" >
-        <span>{{ .user.Name }}</span>
-      </a>
 
-    </div>
-  
-    <div>
-      <div>
-        <h3><a href="/posts/post._id">post.title</a></h3>
-        <pre>post.content</pre>
-        <div>
-          <span></span>post.created_at</span>
-          <span>
-            <span>浏览(post.pv)</span>
-            <span>留言(post.commentsCount)</span>
+{{ template "posts-content" . }}
 
-              <div>
-                <div></div>
-                <i></i>
-                <div>
-                  <div><a href="/posts/post._id/edit">编辑</a></div>
-                  <div><a href="/posts/post._id/remove">删除</a></div>
-                </div>
-              </div>
-
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
 {{ template "footer" . }}

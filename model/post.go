@@ -20,10 +20,34 @@ func (p *Post) Save() error {
 
 	_, err := initdb.Db.Exec(sqlstr, p.Author, p.Title, p.Content)
 	if err != nil {
-		// panic(err.Error())
-		return err
+		panic(err.Error())
 	}
 	return nil
+}
+
+// GetPosts 根据用户获取全部的文章
+func GetPosts(author int64) []Post {
+	var posts []Post
+
+	stmtOut, err := initdb.Db.Prepare("SELECT author,title,content,pv FROM blog.post WHERE author = ?")
+	if err != nil {
+		panic(err.Error()) // proper error handling instead of panic in your app
+	}
+	defer stmtOut.Close()
+
+	rows, err := stmtOut.Query(author)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for rows.Next() {
+		post := &Post{}
+		rows.Scan(&post.Author, &post.Title, &post.Content, &post.PV)
+
+		posts = append(posts, *post)
+	}
+
+	return posts
 }
 
 // Check 校验post表单

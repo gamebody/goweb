@@ -3,6 +3,8 @@ package initdb
 import (
 	"database/sql"
 	"fmt"
+
+	_ "github.com/go-sql-driver/mysql" // 初始化数据库
 )
 
 // Db asd

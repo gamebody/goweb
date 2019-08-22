@@ -54,7 +54,11 @@ func Signup(router *gin.Engine) {
 			// 上传文件
 			saveFileName = string(time.Now().Format("20060102150405")) + "_" + file.Filename
 			user.Avatar = saveFileName
-			c.SaveUploadedFile(file, "./public/imgs/"+saveFileName)
+			err = c.SaveUploadedFile(file, "./public/imgs/"+saveFileName)
+		}
+
+		if err != nil {
+			panic(err.Error())
 		}
 
 		if err := user.Check(); err != nil {

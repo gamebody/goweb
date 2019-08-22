@@ -18,6 +18,26 @@ func Posts(router *gin.Engine) {
 
 	posts := router.Group("posts")
 
+	posts.GET("/", middleware.LoginPass(), func(c *gin.Context) {
+		var user model.User
+		session := sessions.Default(c)
+		msgs := session.Flashes()
+		data := session.Get("user").([]byte)
+		json.Unmarshal(data, &user)
+
+		posts := model.GetPosts(user.ID)
+		fmt.Println(posts[0].Title)
+
+		session.Save()
+
+		c.HTML(http.StatusOK, "posts.html", gin.H{
+			"title": c.MustGet("hello"),
+			"flash": msgs,
+			"user":  user,
+			"posts": posts,
+		})
+	})
+
 	posts.GET("/create", middleware.LoginPass(), func(c *gin.Context) {
 		var user model.User
 		session := sessions.Default(c)
@@ -64,7 +84,7 @@ func Posts(router *gin.Engine) {
 
 	})
 
-	posts.GET("/:id", middleware.LoginPass(), func(c *gin.Context) {
+	posts.GET("posts/:id", middleware.LoginPass(), func(c *gin.Context) {
 		id := c.Param("id")
 		fmt.Println(id)
 
