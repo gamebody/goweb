@@ -13,7 +13,7 @@
       <h3><a href="/posts/{{ $post.Author }}">{{ $post.Title }}</a></h3>
       <pre>{{ $post.Content }}</pre>
       <div>
-        <span>post.created_at</span>
+        <span>{{ $post.CreateTime }}</span>
         <span>
           <span>浏览({{ $post.PV }})</span>
           <span>留言(post.commentsCount)</span>
