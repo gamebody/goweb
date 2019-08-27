@@ -11,7 +11,7 @@
   <div>
     <div>
       <h3><a href="/posts/$post.Author">{{ .post.Title }} </a></h3>
-      <pre>$post.Content </pre>
+      <pre>{{ .post.Content }}</pre>
       <div>
         <span>{{ .post.CreateTime }}</span>
         <span>
@@ -22,8 +22,8 @@
             <div></div>
             <i></i>
             <div>
-              <div><a href="/posts/post._id/edit">编辑</a></div>
-              <div><a href="/posts/post._id/remove">删除</a></div>
+              <div><a href="/posts/edit/{{.post.ID}}">编辑</a></div>
+              <div><a href="/posts/remove/{{.post.ID}}/">删除</a></div>
             </div>
           </div>
 

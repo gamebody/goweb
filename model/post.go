@@ -28,11 +28,22 @@ func (p *Post) Save() error {
 	return nil
 }
 
+// Edit 编辑文章
+func (p *Post) Edit() error {
+	sqlstr := "UPDATE blog.post SET title=?,content=? WHERE id = ?"
+
+	_, err := initdb.Db.Exec(sqlstr, p.Title, p.Content, p.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // GetPosts 根据用户获取全部的文章
 func GetPosts(author int64) []Post {
 	var posts []Post
 
-	stmtOut, err := initdb.Db.Prepare("SELECT author,title,content,pv,create_time FROM blog.post WHERE author = ?")
+	stmtOut, err := initdb.Db.Prepare("SELECT id,author,title,content,pv,create_time FROM blog.post WHERE author = ?")
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
@@ -45,7 +56,7 @@ func GetPosts(author int64) []Post {
 
 	for rows.Next() {
 		post := &Post{}
-		rows.Scan(&post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime)
+		rows.Scan(&post.ID, &post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime)
 
 		fmt.Println(*post)
 

@@ -84,7 +84,7 @@ func Posts(router *gin.Engine) {
 
 	})
 
-	posts.GET("post/:postID", middleware.LoginPass(), func(c *gin.Context) {
+	posts.GET("/info/:postID", middleware.LoginPass(), func(c *gin.Context) {
 		var post model.Post
 
 		if postID, err := strconv.Atoi(c.Param("postID")); err != nil {
@@ -111,5 +111,69 @@ func Posts(router *gin.Engine) {
 			"user":  user,
 			"post":  post,
 		})
+	})
+
+	posts.GET("/edit/:postID", middleware.LoginPass(), func(c *gin.Context) {
+		var post model.Post
+		postID := c.Param("postID")
+
+		if postID, err := strconv.Atoi(postID); err != nil {
+			panic(err.Error())
+		} else {
+			post = model.GetPostByID(postID)
+		}
+
+		fmt.Println(post)
+
+		var user model.User
+		session := sessions.Default(c)
+		msgs := session.Flashes()
+		data := session.Get("user").([]byte)
+		json.Unmarshal(data, &user)
+		fmt.Println(user.Avatar)
+		session.Save()
+
+		c.HTML(http.StatusOK, "edit.html", gin.H{
+			"title": user.Name,
+			"flash": msgs,
+			"user":  user,
+			"post":  post,
+		})
+	})
+
+	posts.POST("/edit/:postID", middleware.LoginPass(), func(c *gin.Context) {
+		postID := c.Param("postID")
+
+		var user model.User
+		session := sessions.Default(c)
+		data := session.Get("user").([]byte)
+		json.Unmarshal(data, &user)
+
+		var post model.Post
+		post.Author = user.ID
+		post.Content = c.PostForm("content")
+		post.Title = c.PostForm("title")
+
+		if postID, err := strconv.Atoi(postID); err != nil {
+			panic(err.Error())
+		} else {
+			post.ID = postID
+		}
+
+		if err := post.Check(); err != nil {
+			session.AddFlash(err.Error())
+			session.Save()
+			c.Redirect(http.StatusFound, "/posts/edit/"+postID)
+			return
+		}
+
+		if err := post.Edit(); err != nil {
+			panic(err.Error())
+		}
+
+		session.AddFlash("更新成功！")
+		session.Save()
+
+		c.Redirect(http.StatusFound, "/posts/edit/"+postID)
 	})
 }
