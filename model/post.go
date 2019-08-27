@@ -9,11 +9,12 @@ import (
 
 // Post 用户相关字段
 type Post struct {
+	ID         int    `form:"id"`
 	Author     int64  `form:"author"`
 	Title      string `form:"title"`
 	Content    string `form:"content"`
 	PV         int    `form:"pv"`
-	CreateTime int    `form:"create_time"`
+	CreateTime string `form:"create_time"`
 }
 
 // Save 储存用户
@@ -52,6 +53,31 @@ func GetPosts(author int64) []Post {
 	}
 
 	return posts
+}
+
+// GetPostByID 根据id获取文章详情
+func GetPostByID(id int) (post Post) {
+	stmtOut, err := initdb.Db.Prepare("SELECT id,author,title,content,pv,create_time FROM blog.post WHERE id = ?")
+	if err != nil {
+		panic(err.Error()) // proper error handling instead of panic in your app
+	}
+	defer stmtOut.Close()
+
+	if err := stmtOut.QueryRow(id).Scan(&post.ID, &post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime); err != nil {
+		panic(err.Error())
+	}
+	return
+}
+
+// IncPV 浏览量 + 1
+func (p *Post) IncPV() error {
+	sqlstr := "UPDATE blog.post SET pv=pv+1 WHERE id = ?"
+
+	_, err := initdb.Db.Exec(sqlstr, p.ID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Check 校验post表单

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gamebody/goweb/middleware"
 	"github.com/gamebody/goweb/model"
@@ -26,7 +27,6 @@ func Posts(router *gin.Engine) {
 		json.Unmarshal(data, &user)
 
 		posts := model.GetPosts(user.ID)
-		fmt.Println(posts[0].Title)
 
 		session.Save()
 
@@ -84,9 +84,18 @@ func Posts(router *gin.Engine) {
 
 	})
 
-	posts.GET("posts/:id", middleware.LoginPass(), func(c *gin.Context) {
-		id := c.Param("id")
-		fmt.Println(id)
+	posts.GET("post/:postID", middleware.LoginPass(), func(c *gin.Context) {
+		var post model.Post
+
+		if postID, err := strconv.Atoi(c.Param("postID")); err != nil {
+			panic(err.Error())
+		} else {
+			post = model.GetPostByID(postID)
+		}
+
+		if err := post.IncPV(); err != nil {
+			panic(err.Error())
+		}
 
 		var user model.User
 		session := sessions.Default(c)
@@ -96,10 +105,11 @@ func Posts(router *gin.Engine) {
 		fmt.Println(user.Avatar)
 		session.Save()
 
-		c.HTML(http.StatusOK, "posts.html", gin.H{
+		c.HTML(http.StatusOK, "post.html", gin.H{
 			"title": user.Name,
 			"flash": msgs,
 			"user":  user,
+			"post":  post,
 		})
 	})
 }
