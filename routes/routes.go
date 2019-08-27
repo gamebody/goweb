@@ -40,6 +40,7 @@ func Init() *gin.Engine {
 	Signin(router)  // 登录相关
 	Signout(router) // 登出相关
 	Posts(router)   // 登出相关
+	Comment(router) // 评论相关
 
 	return router
 }

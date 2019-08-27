@@ -32,5 +32,17 @@
     </div>
   </div>
 </div>
+<div class="black-line" style="margin-top: 10px;">
+  <h4>留言</h4>
+  <form method="post" enctype="multipart/form-data" action="/comment">
+    <input type="text" value="{{$.user.ID}}" name="author" hidden>
+    <input type="text" value="{{.post.ID}}" name="postid" hidden>
+    <div>
+      <textarea name="content" rows="4" cols="100">{{.post.Content}}</textarea>
+    </div>
+    <input type="submit" value="提交">
+  </form>
+
+</div>
 
 {{ template "footer" . }}
