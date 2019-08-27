@@ -39,6 +39,16 @@ func (p *Post) Edit() error {
 	return nil
 }
 
+func (p *Post) Delete() error {
+	sqlstr := "DELETE FROM blog.post WHERE id = ?"
+
+	_, err := initdb.Db.Exec(sqlstr, p.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // GetPosts 根据用户获取全部的文章
 func GetPosts(author int64) []Post {
 	var posts []Post

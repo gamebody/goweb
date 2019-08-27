@@ -176,4 +176,36 @@ func Posts(router *gin.Engine) {
 
 		c.Redirect(http.StatusFound, "/posts/edit/"+postID)
 	})
+
+	posts.GET("/remove/:postID", middleware.LoginPass(), func(c *gin.Context) {
+		postID := c.Param("postID")
+
+		var user model.User
+		session := sessions.Default(c)
+		data := session.Get("user").([]byte)
+		json.Unmarshal(data, &user)
+
+		var post model.Post
+		post.Author = user.ID
+		post.Content = c.PostForm("content")
+		post.Title = c.PostForm("title")
+
+		if postID, err := strconv.Atoi(postID); err != nil {
+			panic(err.Error())
+		} else {
+			post.ID = postID
+		}
+
+		if err := post.Delete(); err != nil {
+			session.AddFlash(err.Error())
+			session.Save()
+			c.Redirect(http.StatusFound, "/posts")
+			return
+		}
+
+		session.AddFlash("删除成功！")
+		session.Save()
+
+		c.Redirect(http.StatusFound, "/posts")
+	})
 }
