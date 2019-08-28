@@ -11,7 +11,7 @@ import (
 
 // User 用户相关字段
 type User struct {
-	ID         int64  `form:"id"`
+	ID         int    `form:"id"`
 	Name       string `form:"name" binding:"required,min=1,max=10"`
 	Gender     string `form:"gender" binding:"required"`
 	Bio        string `form:"bio" binding:"required"`

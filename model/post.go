@@ -10,7 +10,7 @@ import (
 // Post 用户相关字段
 type Post struct {
 	ID         int    `form:"id"`
-	Author     int64  `form:"author"`
+	Author     int    `form:"author"`
 	Title      string `form:"title"`
 	Content    string `form:"content"`
 	PV         int    `form:"pv"`
@@ -56,7 +56,7 @@ func (p *Post) Delete() error {
 }
 
 // GetPosts 根据用户获取全部的文章
-func GetPosts(author int64) []Post {
+func GetPosts(author int) []Post {
 	var posts []Post
 
 	stmtOut, err := initdb.Db.Prepare("SELECT id,author,title,content,pv,create_time FROM blog.post WHERE author = ?")

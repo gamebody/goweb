@@ -76,12 +76,26 @@ func Comment(router *gin.Engine) {
 	})
 
 	comment.GET("remove/:commentID", middleware.LoginPass(), func(c *gin.Context) {
+		var user model.User
 		session := sessions.Default(c)
+		data := session.Get("user").([]byte)
+		json.Unmarshal(data, &user)
+
 		var commentID int
 		if commentIDInt, err := strconv.Atoi(c.Param("commentID")); err != nil {
 			panic(err.Error())
 		} else {
 			commentID = commentIDInt
+		}
+
+		comment := model.GetCommentByID(commentID)
+		if comment.Author != user.ID {
+			session.AddFlash("删除失败，您没有权限！")
+			session.Save()
+			backURL := c.GetHeader("referer")
+			c.Redirect(http.StatusFound, backURL)
+			c.Abort()
+			return
 		}
 
 		if err := model.DeleteCommentByID(commentID); err != nil {

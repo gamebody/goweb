@@ -28,6 +28,21 @@ func (c *Comment) Save() error {
 	return nil
 }
 
+// GetCommentByID 获取评论详情
+func GetCommentByID(commentID int) (comment Comment) {
+	stmtOut, err := initdb.Db.Prepare("SELECT id,postid,author FROM blog.comment WHERE id = ?")
+	if err != nil {
+		panic(err.Error()) // proper error handling instead of panic in your app
+	}
+	defer stmtOut.Close()
+
+	if err := stmtOut.QueryRow(commentID).Scan(&comment.ID, &comment.PostID, &comment.Author); err != nil {
+		panic(err.Error())
+	}
+
+	return
+}
+
 // DeleteCommentByID 删除评论
 func DeleteCommentByID(commentID int) error {
 	sqlstr := "DELETE FROM blog.comment WHERE id = ?"
