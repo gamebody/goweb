@@ -1,6 +1,37 @@
 {{ template "header" . }}
 <h1>首页1</h1>
 
-{{ template "posts-content" . }}
+{{ range $i, $post := .posts }}
+<div class="black-line" style="margin-top: 10px">
+  <div>
+    <a href="/posts?author={{ $post.ID }}" title="{{ $post.Name }}" class="avatar">
+      <img src="/public/imgs/{{ $post.Avatar }}">
+      <span>{{ $post.Name }}</span>
+    </a>
+  </div>
+  <div>
+    <div>
+      <h3><a href="/posts/info/{{ $post.ID }}">{{ $post.Title }}</a></h3>
+      <pre>{{ $post.Content }}</pre>
+      <div>
+        <span>{{ $post.CreateTime }}</span>
+        <span>
+          <span>浏览({{ $post.PV }})</span>
+          <span>留言(post.commentsCount)</span>
 
+          <div>
+            <div></div>
+            <i></i>
+            <div>
+              <div><a href="/posts/edit/{{$post.ID}}">编辑</a></div>
+              <div><a href="/posts/remove/{{$post.ID}}">删除</a></div>
+            </div>
+          </div>
+
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}
 {{ template "footer" . }}

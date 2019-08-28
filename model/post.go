@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/gamebody/goweb/initdb"
 )
@@ -15,6 +14,9 @@ type Post struct {
 	Content    string `form:"content"`
 	PV         int    `form:"pv"`
 	CreateTime string `form:"create_time"`
+
+	Name   string
+	Avatar string
 }
 
 // Save 储存用户
@@ -69,8 +71,6 @@ func GetPosts(author int64) []Post {
 		post := &Post{}
 		rows.Scan(&post.ID, &post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime)
 
-		fmt.Println(*post)
-
 		posts = append(posts, *post)
 	}
 
@@ -81,7 +81,7 @@ func GetPosts(author int64) []Post {
 func GetAllPosts() []Post {
 	var posts []Post
 
-	stmtOut, err := initdb.Db.Prepare("SELECT id,author,title,content,pv,create_time FROM blog.post")
+	stmtOut, err := initdb.Db.Prepare("SELECT p.id,author,title,content,pv,create_time,name,avatar FROM blog.post p left join blog.user u ON p.author=u.id")
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
@@ -94,9 +94,7 @@ func GetAllPosts() []Post {
 
 	for rows.Next() {
 		post := &Post{}
-		rows.Scan(&post.ID, &post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime)
-
-		fmt.Println(*post)
+		rows.Scan(&post.ID, &post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime, &post.Name, &post.Avatar)
 
 		posts = append(posts, *post)
 	}
