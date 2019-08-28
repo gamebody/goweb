@@ -28,6 +28,17 @@ func (c *Comment) Save() error {
 	return nil
 }
 
+// DeleteCommentByID 删除评论
+func DeleteCommentByID(commentID int) error {
+	sqlstr := "DELETE FROM blog.comment WHERE id = ?"
+
+	_, err := initdb.Db.Exec(sqlstr, commentID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // GetCommentsByPostID 根据文章id获取评论
 func GetCommentsByPostID(postID int) (comments []Comment) {
 

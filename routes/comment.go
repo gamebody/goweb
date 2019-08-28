@@ -75,4 +75,25 @@ func Comment(router *gin.Engine) {
 
 	})
 
+	comment.GET("remove/:commentID", middleware.LoginPass(), func(c *gin.Context) {
+		session := sessions.Default(c)
+		var commentID int
+		if commentIDInt, err := strconv.Atoi(c.Param("commentID")); err != nil {
+			panic(err.Error())
+		} else {
+			commentID = commentIDInt
+		}
+
+		if err := model.DeleteCommentByID(commentID); err != nil {
+			panic(err.Error())
+		}
+
+		session.AddFlash("删除成功")
+		session.Save()
+		backURL := c.GetHeader("referer")
+		c.Redirect(http.StatusFound, backURL)
+		c.Abort()
+		return
+	})
+
 }
