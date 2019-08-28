@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 
+	"github.com/gamebody/goweb/model"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -26,13 +27,21 @@ func Init() *gin.Engine {
 	})
 
 	router.GET("", func(c *gin.Context) {
+		var posts []model.Post
 		session := sessions.Default(c)
 		msgs := session.Flashes()
+
+		// 没登录，显示全部的文章
+		if session.Get("user") == nil {
+			posts = model.GetAllPosts()
+		}
+
 		session.Save()
 
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title": "Hello，world！",
 			"flash": msgs,
+			"posts": posts,
 		})
 	})
 

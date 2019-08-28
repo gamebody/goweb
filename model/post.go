@@ -77,6 +77,33 @@ func GetPosts(author int64) []Post {
 	return posts
 }
 
+// GetAllPosts 所有的文章
+func GetAllPosts() []Post {
+	var posts []Post
+
+	stmtOut, err := initdb.Db.Prepare("SELECT id,author,title,content,pv,create_time FROM blog.post")
+	if err != nil {
+		panic(err.Error()) // proper error handling instead of panic in your app
+	}
+	defer stmtOut.Close()
+
+	rows, err := stmtOut.Query()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for rows.Next() {
+		post := &Post{}
+		rows.Scan(&post.ID, &post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime)
+
+		fmt.Println(*post)
+
+		posts = append(posts, *post)
+	}
+
+	return posts
+}
+
 // GetPostByID 根据id获取文章详情
 func GetPostByID(id int) (post Post) {
 	stmtOut, err := initdb.Db.Prepare("SELECT id,author,title,content,pv,create_time FROM blog.post WHERE id = ?")
