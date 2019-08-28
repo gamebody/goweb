@@ -17,17 +17,7 @@
         <span>{{ $post.CreateTime }}</span>
         <span>
           <span>浏览({{ $post.PV }})</span>
-          <span>留言(post.commentsCount)</span>
-
-          <div>
-            <div></div>
-            <i></i>
-            <div>
-              <div><a href="/posts/edit/{{$post.ID}}">编辑</a></div>
-              <div><a href="/posts/remove/{{$post.ID}}">删除</a></div>
-            </div>
-          </div>
-
+          <span>留言({{ $post.Count }})</span>
         </span>
       </div>
     </div>

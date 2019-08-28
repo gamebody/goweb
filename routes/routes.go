@@ -33,9 +33,10 @@ func Init() *gin.Engine {
 
 		// 没登录，显示全部的文章
 		if session.Get("user") == nil {
-			posts = model.GetAllPosts()
+
 		}
 
+		posts = model.GetAllPosts()
 		session.Save()
 
 		c.HTML(http.StatusOK, "index.html", gin.H{
