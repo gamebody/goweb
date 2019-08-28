@@ -84,7 +84,7 @@ func Posts(router *gin.Engine) {
 
 	})
 
-	posts.GET("/info/:postID", middleware.LoginPass(), func(c *gin.Context) {
+	posts.GET("/info/:postID", func(c *gin.Context) {
 		var post model.Post
 		var comments []model.Comment
 
@@ -100,15 +100,17 @@ func Posts(router *gin.Engine) {
 		}
 
 		var user model.User
+
 		session := sessions.Default(c)
+		if session.Get("user") != nil {
+			data := session.Get("user").([]byte)
+			json.Unmarshal(data, &user)
+		}
+
 		msgs := session.Flashes()
-		data := session.Get("user").([]byte)
-		json.Unmarshal(data, &user)
-		fmt.Println(user.Avatar)
 		session.Save()
 
 		c.HTML(http.StatusOK, "post.html", gin.H{
-			"title":    user.Name,
 			"flash":    msgs,
 			"user":     user,
 			"post":     post,

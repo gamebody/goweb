@@ -3,20 +3,20 @@
 
 <div class="black-line" style="margin-top: 10px">
   <div>
-    <a href="/posts?author={{ $.user.ID }}" title="{{ $.user.Name }}" data-bio="{{ $.user.Bio }}" class="avatar">
-      <img src="/public/imgs/{{ $.user.Avatar }}">
-      <span>{{ $.user.Name }}</span>
+    <a href="/posts?author={{ .post.UserID }}" title="{{ .post.Name }}" class="avatar">
+      <img src="/public/imgs/{{ .post.Avatar }}">
+      <span>{{ .post.Name }}</span>
     </a>
   </div>
   <div>
     <div>
-      <h3><a href="/posts/$post.Author">{{ .post.Title }} </a></h3>
+      <h3>{{ .post.Title }}</h3>
       <pre>{{ .post.Content }}</pre>
       <div>
         <span>{{ .post.CreateTime }}</span>
         <span>
           <span>浏览( {{ .post.PV }} )</span>
-          <span>留言(post.commentsCount)</span>
+          <span>留言({{ .post.Count }})</span>
 
           <div>
             <div></div>

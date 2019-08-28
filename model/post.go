@@ -19,6 +19,7 @@ type Post struct {
 	Name   string
 	Avatar string
 	Count  string
+	UserID string
 }
 
 // Save 储存用户
@@ -120,15 +121,30 @@ func GetAllPosts() []Post {
 
 // GetPostByID 根据id获取文章详情
 func GetPostByID(id int) (post Post) {
-	stmtOut, err := initdb.Db.Prepare("SELECT id,author,title,content,pv,create_time FROM blog.post WHERE id = ?")
+	stmtOut, err := initdb.Db.Prepare(`
+		SELECT 
+			p.id,
+			p.author,
+			p.title,
+			p.content,
+			p.pv,
+			p.create_time,
+			u.name,
+			u.avatar,
+			u.id,
+			(SELECT COUNT(*) FROM blog.comment WHERE blog.comment.postid=p.id) AS count
+		FROM blog.post AS p, blog.user AS u, blog.comment AS c
+		WHERE p.author=u.id AND p.id = ?
+		GROUP BY p.id`)
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 	defer stmtOut.Close()
 
-	if err := stmtOut.QueryRow(id).Scan(&post.ID, &post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime); err != nil {
+	if err := stmtOut.QueryRow(id).Scan(&post.ID, &post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime, &post.Name, &post.Avatar, &post.UserID, &post.Count); err != nil {
 		panic(err.Error())
 	}
+	fmt.Println(post)
 	return
 }
 
