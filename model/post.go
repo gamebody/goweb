@@ -39,6 +39,7 @@ func (p *Post) Edit() error {
 	return nil
 }
 
+// Delete 删除文章
 func (p *Post) Delete() error {
 	sqlstr := "DELETE FROM blog.post WHERE id = ?"
 

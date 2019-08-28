@@ -86,11 +86,13 @@ func Posts(router *gin.Engine) {
 
 	posts.GET("/info/:postID", middleware.LoginPass(), func(c *gin.Context) {
 		var post model.Post
+		var comments []model.Comment
 
 		if postID, err := strconv.Atoi(c.Param("postID")); err != nil {
 			panic(err.Error())
 		} else {
 			post = model.GetPostByID(postID)
+			comments = model.GetCommentsByPostID(postID)
 		}
 
 		if err := post.IncPV(); err != nil {
@@ -106,10 +108,11 @@ func Posts(router *gin.Engine) {
 		session.Save()
 
 		c.HTML(http.StatusOK, "post.html", gin.H{
-			"title": user.Name,
-			"flash": msgs,
-			"user":  user,
-			"post":  post,
+			"title":    user.Name,
+			"flash":    msgs,
+			"user":     user,
+			"post":     post,
+			"comments": comments,
 		})
 	})
 

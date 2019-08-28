@@ -34,6 +34,18 @@
 </div>
 <div class="black-line" style="margin-top: 10px;">
   <h4>留言</h4>
+  <ul>
+  {{ range $i, $e := $.comments }}
+    <li class="black-line" style="margin-bottom: 10px;">
+      <div>
+        <span>{{ $e.Author }}</span>
+        <img src="" alt="">
+      </div>
+      {{ $e.Content }}
+    </li>
+  {{ end }}
+
+  </ul>
   <form method="post" enctype="multipart/form-data" action="/comment">
     <input type="text" value="{{$.user.ID}}" name="author" hidden>
     <input type="text" value="{{.post.ID}}" name="postid" hidden>
