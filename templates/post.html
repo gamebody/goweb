@@ -37,11 +37,13 @@
   <ul>
   {{ range $i, $e := $.comments }}
     <li class="black-line" style="margin-bottom: 10px;">
-      <div>
-        <span>{{ $e.Author }}</span>
-        <img src="" alt="">
+      <div class="avatar">
+        <img src="/public/imgs/{{$e.Avatar}}" alt="">
+        <span>{{ $e.Name }}</span>({{ $e.CreateTime }})
       </div>
-      {{ $e.Content }}
+      <p>
+        {{ $e.Content }}
+      </p>
     </li>
   {{ end }}
 
@@ -50,7 +52,7 @@
     <input type="text" value="{{$.user.ID}}" name="author" hidden>
     <input type="text" value="{{.post.ID}}" name="postid" hidden>
     <div>
-      <textarea name="content" rows="4" cols="100">{{.post.Content}}</textarea>
+      <textarea name="content" rows="4" cols="100"></textarea>
     </div>
     <input type="submit" value="提交">
   </form>
