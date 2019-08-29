@@ -40,7 +40,7 @@ func Init() *gin.Engine {
 		session.Save()
 
 		c.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "Hello，world！",
+			"title": "Hello, GO Web！",
 			"flash": msgs,
 			"posts": posts,
 		})

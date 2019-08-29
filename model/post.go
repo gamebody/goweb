@@ -59,7 +59,20 @@ func (p *Post) Delete() error {
 func GetPosts(author int) []Post {
 	var posts []Post
 
-	stmtOut, err := initdb.Db.Prepare("SELECT id,author,title,content,pv,create_time FROM blog.post WHERE author = ?")
+	stmtOut, err := initdb.Db.Prepare(`
+		SELECT
+			p.id,
+			p.author,
+			p.title,
+			p.content,
+			p.pv,
+			p.create_time,
+			u.name,
+			u.avatar,
+			(SELECT COUNT(*) FROM blog.comment WHERE blog.comment.postid=p.id) AS count
+		FROM blog.post AS p, blog.user AS u, blog.comment AS c
+		WHERE p.author=u.id AND u.id=?
+		GROUP BY p.id`)
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
@@ -72,7 +85,16 @@ func GetPosts(author int) []Post {
 
 	for rows.Next() {
 		post := &Post{}
-		rows.Scan(&post.ID, &post.Author, &post.Title, &post.Content, &post.PV, &post.CreateTime)
+		rows.Scan(
+			&post.ID,
+			&post.Author,
+			&post.Title,
+			&post.Content,
+			&post.PV,
+			&post.CreateTime,
+			&post.Name,
+			&post.Avatar,
+			&post.Count)
 
 		posts = append(posts, *post)
 	}

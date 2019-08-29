@@ -20,20 +20,32 @@ func Posts(router *gin.Engine) {
 	posts := router.Group("posts")
 
 	posts.GET("/", middleware.LoginPass(), func(c *gin.Context) {
-		var user model.User
 		session := sessions.Default(c)
-		msgs := session.Flashes()
+		var userID int
+
+		if c.Query("author") != "" {
+			if id, err := strconv.Atoi(c.Query("author")); err != nil {
+				panic(err.Error())
+			} else {
+				userID = id
+			}
+		}
+
+		var user model.User
 		data := session.Get("user").([]byte)
 		json.Unmarshal(data, &user)
 
-		posts := model.GetPosts(user.ID)
+		posts := model.GetPosts(userID)
 
+		fmt.Println(posts)
+
+		msgs := session.Flashes()
 		session.Save()
 
 		c.HTML(http.StatusOK, "posts.html", gin.H{
 			"title": c.MustGet("hello"),
 			"flash": msgs,
-			"user":  user,
+			// "user":  user,
 			"posts": posts,
 		})
 	})

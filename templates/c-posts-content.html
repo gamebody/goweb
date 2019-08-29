@@ -2,11 +2,9 @@
 
 {{ range $i, $post := .posts }}
 <div class="black-line" style="margin-top: 10px">
-  <div>
-    <a href="/posts?author={{ $.user.ID }}" title="{{ $.user.Name }}" data-bio="{{ $.user.Bio }}" class="avatar">
-      <img src="/public/imgs/{{ $.user.Avatar }}">
-      <span>{{ $.user.Name }}</span>
-    </a>
+  <div class="avatar">
+    <img src="/public/imgs/{{ $post.Avatar }}">
+    <span>{{ $post.Name }}</span>
   </div>
   <div>
     <div>

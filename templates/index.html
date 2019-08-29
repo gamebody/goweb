@@ -4,7 +4,7 @@
 {{ range $i, $post := .posts }}
 <div class="black-line" style="margin-top: 10px">
   <div>
-    <a href="/posts?author={{ $post.ID }}" title="{{ $post.Name }}" class="avatar">
+    <a href="/posts?author={{ $post.Author }}" title="{{ $post.Name }}" class="avatar">
       <img src="/public/imgs/{{ $post.Avatar }}">
       <span>{{ $post.Name }}</span>
     </a>
