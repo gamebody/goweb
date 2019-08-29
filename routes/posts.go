@@ -166,7 +166,7 @@ func Posts(router *gin.Engine) {
 		data := session.Get("user").([]byte)
 		json.Unmarshal(data, &user)
 
-		var post model.Post
+		var post, editPost model.Post
 		post.Author = user.ID
 		post.Content = c.PostForm("content")
 		post.Title = c.PostForm("title")
@@ -174,7 +174,15 @@ func Posts(router *gin.Engine) {
 		if postID, err := strconv.Atoi(postID); err != nil {
 			panic(err.Error())
 		} else {
-			post.ID = postID
+			editPost = model.GetPostByID(postID)
+		}
+
+		if editPost.Author != user.ID {
+			session.AddFlash("修改失败，哥，您没有权限！")
+			session.Save()
+
+			c.Redirect(http.StatusFound, "/posts/edit/"+postID)
+			return
 		}
 
 		if err := post.Check(); err != nil {
