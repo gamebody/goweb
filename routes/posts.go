@@ -90,8 +90,8 @@ func Posts(router *gin.Engine) {
 
 		session.AddFlash("恭喜您，发表成功！")
 		session.Save()
-		id := string(user.ID)
-		c.Redirect(http.StatusFound, "/posts/"+id)
+		// id := string(user.ID)
+		c.Redirect(http.StatusFound, "/")
 		return
 
 	})

@@ -2,9 +2,9 @@
 {{ template "header" . }}
 <div>
   <div>
-    <a href="/posts?author={{ .user.ID }}" title="{{ .user.Name }}" data-bio="{{ .user.Bio }}" class="avatar">
-      <img src="/public/imgs/{{ .user.Avatar }}" >
-      <span>{{ .user.Name }}</span>
+    <a href="/posts?author={{ .post.ID }}" title="{{ .post.Name }}" class="avatar">
+      <img src="/public/imgs/{{ .post.Avatar }}" >
+      <span>{{ .post.Name }}</span>
     </a>
 
   </div>
